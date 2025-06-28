@@ -8,7 +8,7 @@ public static class DbInitializer
     public static async Task Initialize(ApplicationDbContext context)
     {
         // Asegurarse de que la base de datos esté creada
-        await context.Database.EnsureCreatedAsync();
+        
 
         // Si ya hay categorías, no inicializar
         if (context.Categories.Any())
