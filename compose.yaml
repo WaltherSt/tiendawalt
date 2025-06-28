@@ -1,0 +1,7 @@
+﻿services:
+  tienda:
+    image: tienda
+    build:
+      context: .
+      dockerfile: TIENDA/Dockerfile
+

@@ -1,0 +1,102 @@
+# Visual Studio y .NET
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosf
+*.sln.docstates
+*.vspscc
+*.vssscc
+
+# Resultados de compilación
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.meta
+*.tlog
+*.vsp
+*.vspx
+*.cache
+*.aps
+*.bsc
+*.sbr
+
+# Paquetes NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Rider
+.idea/
+*.iml
+*.ipr
+*.iws
+*.resharper
+*.dotsettings.user
+*.userprefs
+
+# Docker
+*.dockerignore
+!Dockerfile
+!compose.yaml
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Resultados de pruebas
+TestResults/
+*.trx
+*.coverage
+
+# Dependencias de frontend (gestionadas por npm, yarn, etc. o descargadas)
+node_modules/
+wwwroot/lib/
+
+# Archivos de configuración local/sensibles
+appsettings.Development.json
+appsettings.json.user
+*.usersecrets
+
+# Archivos temporales y de log
+*.log
+*.tmp
+*.temp
+*.backup
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+*.rej
+*.diff
+*.patch
+*.pid
+*.seed
+*.pid.lock
+
+# Archivos de base de datos (desarrollo local)
+*.db
+*.sqlite
+*.sqlite-journal
+*.mdf
+*.ldf
+*.sdf
+
+# Máquinas virtuales / imágenes de disco
+*.vmdk
+*.vdi
+*.vbox
+*.iso
+*.img
+*.dmg
+
+# Archivos generados misceláneos
+*.map
+*.min.js
+*.min.css
+*.tsbuildinfo

@@ -1,0 +1,120 @@
+@model List<Product>
+
+<style>
+.table-cell-wrap {
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    max-width: 0;
+}
+</style>
+
+<div class="max-w-8xl mx-auto px-6 py-12">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-light text-gray-800 tracking-tight">Catálogo de Productos</h1>
+            <p class="mt-1 text-sm text-gray-500 font-light">Gestión completa del inventario</p>
+        </div>
+        <div class="flex gap-3">
+            <a asp-action="Create" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm font-light flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Nuevo Producto
+            </a>
+            <a asp-controller="Product" 
+               asp-action="ExportToExcel" 
+               class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-light flex items-center gap-2 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                </svg>
+                Exportar
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
+        <table class="w-full table-fixed">
+            <thead class="border-b border-gray-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-40">Producto</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-48">Descripción</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-24">Estado</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-20">Orgánico</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-28">Origen</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-24">Precio</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-24">Valoración</th>
+                    <th class="px-3 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-20">Reseñas</th>
+                    <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider font-light w-28">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200/30">
+                @foreach (var product in Model)
+                {
+                    <tr class="hover:bg-gray-50/50 transition-colors duration-150">
+                        <td class="px-6 py-4 table-cell-wrap">
+                            <div class="text-sm font-normal text-gray-900">@product.Name</div>
+                        </td>
+                        <td class="px-3 py-4 table-cell-wrap">
+                            <div class="text-sm text-gray-500">@product.Description</div>
+                        </td>
+                        <td class="px-3 py-4 table-cell-wrap">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-normal 
+                                @(product.InStock ? "text-green-700 bg-green-100/30" : "text-rose-700 bg-rose-100/30")">
+                                @(product.InStock ? "Disponible" : "Agotado")
+                            </span>
+                        </td>
+                        <td class="px-3 py-4 table-cell-wrap text-sm text-gray-500">
+                            <span class="@(product.Organic ? "text-emerald-500" : "text-gray-400")">
+                                @(product.Organic ? "Sí" : "No")
+                            </span>
+                        </td>
+                        <td class="px-3 py-4 table-cell-wrap text-sm text-gray-500">@product.Origin</td>
+                        <td class="px-3 py-4 table-cell-wrap text-sm font-medium text-gray-900">@product.Price.ToString("C")</td>
+                        <td class="px-3 py-4 table-cell-wrap">
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-900 mr-1">@product.Rating</span>
+                                <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            </div>
+                        </td>
+                        <td class="px-3 py-4 table-cell-wrap text-sm text-gray-500">@product.Reviews</td>
+                        <td class="px-6 py-4 table-cell-wrap text-right">
+                            <div class="flex justify-end items-center gap-3">
+                                <!-- Editar -->
+                                <a asp-action="Edit" asp-route-id="@product.Id" class="text-gray-400 hover:text-blue-600 transition-colors" title="Editar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                </a>
+    
+                                <!-- Eliminar -->
+                                <a asp-action="Delete" asp-route-id="@product.Id" class="text-gray-400 hover:text-red-600 transition-colors" title="Eliminar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+        <div class="border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+                Mostrando <span class="font-medium">1</span> a <span class="font-medium">10</span> de <span class="font-medium">@Model.Count</span> productos
+            </div>
+            <div class="flex gap-2">
+                <button class="px-3 py-1 border border-gray-300 rounded text-sm font-light text-gray-700 hover:bg-gray-50">
+                    Anterior
+                </button>
+                <button class="px-3 py-1 border border-gray-300 rounded text-sm font-light text-gray-700 hover:bg-gray-50">
+                    Siguiente
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

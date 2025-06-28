@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - TIENDA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <style>
+        /* Estilos personalizados */
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .sidebar-collapsed {
+            width: 5rem;
+        }
+        .sidebar-collapsed .nav-text {
+            display: none;
+        }
+        .content-area {
+            transition: margin-left 0.3s ease;
+        }
+        .active-menu-item {
+            background-color: rgba(243, 244, 246, 0.5); /* Light gray with transparency */
+            border-left: 3px solid #3b82f6; /* Keep the existing blue border */
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white shadow-md w-64 fixed h-full z-10">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-store text-blue-500 text-2xl"></i>
+                    <span class="text-xl font-light text-gray-800">TIENDA</span>
+                </div>
+            </div>
+            
+            <nav class="mt-6">
+                <div class="px-4 space-y-1">
+                    
+                    @{ 
+                        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+                    }
+
+                    <a asp-controller="Home" asp-action="Index" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors @(currentController == "Home" ? "active-menu-item" : "")">
+                        <i class="fas fa-home text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Inicio</span>
+                    </a>
+                    
+                    <a asp-controller="Product" asp-action="Index" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors @(currentController == "Product" ? "active-menu-item" : "")">
+                        <i class="fas fa-boxes text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Productos</span>
+                    </a>
+                    
+                    <a asp-controller="Category" asp-action="Index" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors @(currentController == "Category" ? "active-menu-item" : "")">
+                        <i class="fas fa-tags text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Categorías</span>
+                    </a>
+                    
+                    <a asp-controller="Order" asp-action="Index" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors @(currentController == "Order" ? "active-menu-item" : "")">
+                        <i class="fas fa-shopping-cart text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Pedidos</span>
+                    </a>
+                    
+                    <a asp-controller="Customer" asp-action="Index" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors @(currentController == "Customer" ? "active-menu-item" : "")">
+                        <i class="fas fa-users text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Clientes</span>
+                    </a>
+                </div>
+                
+                <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
+                    <a asp-controller="Home" asp-action="Privacy" class="flex items-center px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="fas fa-shield-alt text-lg w-6 text-center"></i>
+                        <span class="nav-text ml-3 font-light">Privacidad</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area flex-1 ml-64">
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm">
+                <div class="flex justify-between items-center px-6 py-4">
+                    <div class="flex items-center">
+                        <button id="sidebarToggle" class="text-gray-500 hover:text-gray-600 mr-4 hidden">
+                            <i class="fas fa-bars text-lg"></i>
+                        </button>
+                        <h1 class="text-xl font-light text-gray-800">@ViewData["Title"]</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <i class="fas fa-bell text-gray-500 hover:text-gray-600 cursor-pointer"></i>
+                            <span class="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="fas fa-user text-blue-500"></i>
+                            </div>
+                            <span class="text-sm font-light">Admin</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="p-6">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar en móviles
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('sidebar-collapsed');
+            document.querySelector('.content-area').classList.toggle('ml-64');
+            document.querySelector('.content-area').classList.toggle('ml-20');
+        });
+
+        // Mostrar/ocultar botón toggle según tamaño de pantalla
+        function handleResize() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            if (window.innerWidth < 768) {
+                sidebarToggle.classList.remove('hidden');
+                document.querySelector('.sidebar').classList.add('sidebar-collapsed');
+                document.querySelector('.content-area').classList.remove('ml-64');
+                document.querySelector('.content-area').classList.add('ml-20');
+            } else {
+                sidebarToggle.classList.add('hidden');
+                document.querySelector('.sidebar').classList.remove('sidebar-collapsed');
+                document.querySelector('.content-area').classList.add('ml-64');
+                document.querySelector('.content-area').classList.remove('ml-20');
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        document.addEventListener('DOMContentLoaded', handleResize);
+    </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
