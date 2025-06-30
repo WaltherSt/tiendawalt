@@ -13,7 +13,7 @@ services:
     depends_on:
       - db
 
-  db:
+  dbbusca en documentos un archivo :
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: W@lter1991

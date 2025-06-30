@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using TIENDA.Data;
 using TIENDA.Models.Repositories;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using TIENDA.Models;
+using Microsoft.Extensions.DependencyInjection; // Añadir esta línea
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +18,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     )
 );
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // Añadir soporte para Razor Pages
+
+
+// Configuración de la sesión
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // La sesión expira después de 30 minutos de inactividad
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CustomerRepository>();
@@ -51,10 +68,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession(); // Habilitar el middleware de sesión
+
+app.UseAuthentication(); // Añadir antes de UseAuthorization
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages(); // Mapear las Razor Pages de Identity
 
 app.Run();

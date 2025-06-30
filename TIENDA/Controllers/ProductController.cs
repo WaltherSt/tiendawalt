@@ -9,15 +9,26 @@ using TIENDA.Models.Repositories;
 namespace TIENDA.Controllers;
 [Route("Product")]
 public class ProductController : Controller
-{
-    private readonly ProductRepository _productRepository;
-    private readonly ApplicationDbContext _context;
-
-    public ProductController(ProductRepository productRepository, ApplicationDbContext context)
     {
-        _productRepository = productRepository;
-        _context = context;
-    }
+        private readonly ProductRepository _productRepository;
+        private readonly ApplicationDbContext _context;
+
+        public ProductController(ProductRepository productRepository, ApplicationDbContext context)
+        {
+            _productRepository = productRepository;
+            _context = context;
+        }
+
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(long id)
+        {
+            var product = await _productRepository.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
     
     
     

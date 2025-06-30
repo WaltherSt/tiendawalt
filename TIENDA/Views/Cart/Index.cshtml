@@ -1,0 +1,83 @@
+@model TIENDA.Models.ShoppingCart
+
+@{ 
+    ViewData["Title"] = "Carrito de Compras";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">@ViewData["Title"]</h1>
+
+    @if (Model.Items.Any())
+    {
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th scope="col" class="relative px-6 py-3"><span class="sr-only">Acciones</span></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex-shrink-0 h-16 w-16">
+                                    <img class="h-16 w-16 rounded-md object-cover" src="@item.ImageUrl" alt="@item.ProductName">
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">@item.ProductName</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">@item.Price.ToString("C")</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <form asp-action="UpdateQuantity" asp-controller="Cart" method="post" class="flex items-center">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="0" class="w-20 border border-gray-300 rounded-md px-2 py-1 text-center text-sm" onchange="this.form.submit()" />
+                                </form>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">@item.Total.ToString("C")</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 flex justify-end items-center">
+            <div class="text-lg font-bold text-gray-800 mr-4">Total del Carrito:</div>
+            <div class="text-2xl font-extrabold text-blue-600">@Model.GetTotal().ToString("C")</div>
+        </div>
+
+        <div class="mt-8 flex justify-end">
+            <a asp-controller="Product" asp-action="Index" class="px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-4">
+                Continuar Comprando
+            </a>
+            <a href="#" class="px-6 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Proceder al Pago
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="bg-white shadow-md rounded-lg p-6 text-center">
+            <p class="text-gray-600 text-lg">Tu carrito está vacío.</p>
+            <a asp-controller="Product" asp-action="Index" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Explorar Productos
+            </a>
+        </div>
+    }
+</div>
